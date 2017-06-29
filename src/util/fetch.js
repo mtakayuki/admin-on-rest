@@ -32,6 +32,11 @@ export const fetchJson = (url, options = {}) => {
         });
 };
 
+const queryParameter = (key, values) => (
+    (Array.isArray(values) ? values : [values]).map(value => [key, value].map(encodeURIComponent).join('='))
+);
+
 export const queryParameters = data => Object.keys(data)
-    .map(key => [key, data[key]].map(encodeURIComponent).join('='))
+    .map(key => queryParameter(key, data[key]))
+    .reduce((arr, v) => arr.concat(v), [])
     .join('&');
